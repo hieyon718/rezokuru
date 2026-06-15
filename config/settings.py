@@ -11,14 +11,22 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 import os
 import pymysql
+# python-dotenv 라이브러리 가져오기
 from dotenv import load_dotenv
 from pathlib import Path
 
-
+# 1. 프로젝트 루트에 있는 .env 파일을 읽어서 환경변수로 등록
 load_dotenv()
+
+# 2. MySQLdb 대신 pymysql을 MySQL 드라이버로 사용하도록 설정
 pymysql.install_as_MySQLdb()
 
+# 커스텀 유저 모델을 사용하기 위해 get_user_model 함수를 가져옵니다.
 AUTH_USER_MODEL = 'rezokuru.User'
+
+# .env 파일에서 구글 키값을 가져와 장고 변수에 안전하게 보관합니다.
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_SECRET_KEY = os.getenv("GOOGLE_SECRET_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,6 +90,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
